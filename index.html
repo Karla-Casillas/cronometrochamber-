@@ -14,10 +14,15 @@
       --goose-accent:   #f5a623;
       --white:          #ffffff;
       --danger:         #ff3b3b;
+      /* Group 2 – Duelo de Personajes: cyan/teal blue */
+      --duel-purple:    #0891b2;
+      --duel-light:     #22d3ee;
+      --duel-dark:      #041f2e;
+      --duel-mid:       #082d3f;
     }
- 
+
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
     body {
       font-family: 'Montserrat', sans-serif;
       background: var(--goose-dark);
@@ -28,7 +33,7 @@
       overflow-x: hidden;
       position: relative;
     }
- 
+
     body::before {
       content: '';
       position: fixed;
@@ -51,7 +56,7 @@
       pointer-events: none;
       z-index: 0;
     }
- 
+
     /* ── HEADER ── */
     header {
       position: relative;
@@ -65,13 +70,13 @@
       border-bottom: 3px solid var(--goose-blue);
       box-shadow: 0 4px 32px rgba(0,0,0,0.5);
     }
- 
+
     .header-left {
       display: flex;
       align-items: center;
       gap: 18px;
     }
- 
+
     .logo-box {
       height: 90px;
       width: auto;
@@ -103,13 +108,13 @@
       width: auto;
       object-fit: contain;
     }
- 
+
     .header-divider {
       width: 2px;
       height: 40px;
       background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.4), transparent);
     }
- 
+
     .header-text h1 {
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 1.05rem;
@@ -119,7 +124,7 @@
       color: var(--white);
       line-height: 1.2;
     }
- 
+
     .header-text p {
       font-size: 0.7rem;
       font-weight: 600;
@@ -128,7 +133,7 @@
       color: var(--goose-light);
       margin-top: 2px;
     }
- 
+
     .header-badge {
       background: linear-gradient(135deg, var(--goose-blue), var(--goose-light));
       border-radius: 8px;
@@ -141,7 +146,7 @@
       color: white;
       white-space: nowrap;
     }
- 
+
     /* ── MAIN ── */
     main {
       position: relative;
@@ -153,7 +158,7 @@
       padding: 32px 24px 36px;
       gap: 28px;
     }
- 
+
     /* ── CLOCK CARD ── */
     .clock-card {
       position: relative;
@@ -169,16 +174,30 @@
         0 12px 60px rgba(0,0,0,0.6),
         inset 0 1px 0 rgba(255,255,255,0.06);
       overflow: hidden;
+      transition: border-color 0.4s;
     }
- 
+
+    .clock-card.duel-mode {
+      border-color: rgba(8,145,178,0.45);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04),
+        0 12px 60px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+
     .clock-card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 3px;
       background: linear-gradient(90deg, transparent, var(--goose-blue), var(--goose-light), transparent);
+      transition: background 0.4s;
     }
- 
+
+    .clock-card.duel-mode::before {
+      background: linear-gradient(90deg, transparent, var(--duel-purple), var(--duel-light), transparent);
+    }
+
     .clock-card::after {
       content: '';
       position: absolute;
@@ -187,7 +206,7 @@
       border-radius: 50%;
       background: radial-gradient(circle, rgba(26,111,196,0.12) 0%, transparent 70%);
     }
- 
+
     .phase-label {
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 0.85rem;
@@ -197,8 +216,13 @@
       margin-bottom: 12px;
       min-height: 1.2em;
       font-weight: 700;
+      transition: color 0.4s;
     }
- 
+
+    .clock-card.duel-mode .phase-label {
+      color: var(--duel-light);
+    }
+
     .time-display {
       font-family: 'Barlow Condensed', sans-serif;
       font-size: clamp(5.5rem, 15vw, 9.5rem);
@@ -211,21 +235,21 @@
       position: relative;
       z-index: 1;
     }
- 
+
     .time-display.warning {
       color: var(--goose-accent);
       text-shadow: 0 0 40px rgba(245,166,35,0.4);
     }
- 
+
     .time-display.blink-red {
       animation: blinkRed 0.7s step-start infinite;
     }
- 
+
     @keyframes blinkRed {
       0%, 100% { color: var(--danger); text-shadow: 0 0 40px rgba(255,59,59,0.5); }
       50%       { color: #ff9999; text-shadow: none; }
     }
- 
+
     .progress-bar-wrap {
       margin-top: 20px;
       height: 5px;
@@ -235,7 +259,7 @@
       position: relative;
       z-index: 1;
     }
- 
+
     .progress-bar-fill {
       height: 100%;
       border-radius: 100px;
@@ -243,15 +267,19 @@
       transition: width 0.9s linear, background 0.3s;
       width: 100%;
     }
- 
+
+    .progress-bar-fill.duel {
+      background: linear-gradient(90deg, var(--duel-purple), var(--duel-light));
+    }
+
     .progress-bar-fill.warning {
       background: linear-gradient(90deg, var(--goose-accent), #ffcc70);
     }
- 
+
     .progress-bar-fill.danger {
       background: linear-gradient(90deg, var(--danger), #ff8080);
     }
- 
+
     .status-bar {
       margin-top: 14px;
       font-size: 0.72rem;
@@ -263,7 +291,7 @@
       position: relative;
       z-index: 1;
     }
- 
+
     /* ── CONTROLS ── */
     .controls {
       display: flex;
@@ -271,7 +299,7 @@
       flex-wrap: wrap;
       justify-content: center;
     }
- 
+
     .ctrl-btn {
       padding: 13px 36px;
       border-radius: 100px;
@@ -286,13 +314,13 @@
       transition: all 0.18s;
       text-transform: uppercase;
     }
- 
+
     .ctrl-btn:hover {
       background: rgba(255,255,255,0.08);
       border-color: rgba(255,255,255,0.5);
       transform: translateY(-1px);
     }
- 
+
     .ctrl-btn.primary {
       background: linear-gradient(135deg, var(--goose-blue), var(--goose-light));
       color: var(--white);
@@ -303,7 +331,18 @@
       box-shadow: 0 8px 32px rgba(26,111,196,0.6);
       transform: translateY(-2px);
     }
- 
+
+    .ctrl-btn.primary-duel {
+      background: linear-gradient(135deg, var(--duel-purple), var(--duel-light));
+      color: var(--white);
+      border-color: transparent;
+      box-shadow: 0 6px 24px rgba(8,145,178,0.45);
+    }
+    .ctrl-btn.primary-duel:hover {
+      box-shadow: 0 8px 32px rgba(8,145,178,0.6);
+      transform: translateY(-2px);
+    }
+
     .ctrl-btn.danger-btn {
       border-color: rgba(255,80,80,0.4);
       color: #ff8080;
@@ -312,30 +351,68 @@
       background: rgba(255,60,60,0.1);
       border-color: var(--danger);
     }
- 
-    /* ── PHASES GRID ── */
+
+    /* ── PHASES SECTION ── */
     .phases-section {
       width: 100%;
-      max-width: 860px;
+      max-width: 960px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
     }
- 
+
+    .phase-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
     .phases-title {
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 0.75rem;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.3);
-      margin-bottom: 14px;
+      color: rgba(58,155,213,0.55);
       text-align: center;
       font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
     }
- 
+
+    .phases-title.duel-title {
+      color: rgba(34,211,238,0.55);
+    }
+
+    .phases-title::before,
+    .phases-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(58,155,213,0.2));
+      max-width: 120px;
+    }
+
+    .phases-title::after {
+      background: linear-gradient(270deg, transparent, rgba(58,155,213,0.2));
+    }
+
+    .phases-title.duel-title::before {
+      background: linear-gradient(90deg, transparent, rgba(34,211,238,0.2));
+    }
+
+    .phases-title.duel-title::after {
+      background: linear-gradient(270deg, transparent, rgba(34,211,238,0.2));
+    }
+
     .phases-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 12px;
     }
- 
+
+    /* ── PHASE BUTTONS – GROUP 1 (Azul) ── */
     .phase-btn {
       background: linear-gradient(160deg, var(--goose-mid), #081724);
       border: 2px solid rgba(26,111,196,0.25);
@@ -353,7 +430,7 @@
       position: relative;
       overflow: hidden;
     }
- 
+
     .phase-btn::before {
       content: '';
       position: absolute;
@@ -363,35 +440,73 @@
       opacity: 0;
       transition: opacity 0.2s;
     }
- 
+
     .phase-btn:hover {
       border-color: rgba(26,111,196,0.6);
       transform: translateY(-3px);
       box-shadow: 0 8px 28px rgba(0,0,0,0.4);
       background: linear-gradient(160deg, #163652, #0d2640);
     }
- 
+
     .phase-btn:hover::before { opacity: 1; }
- 
+
     .phase-btn.active {
       background: linear-gradient(135deg, var(--goose-blue), #1557a0);
       border-color: var(--goose-light);
       box-shadow: 0 8px 32px rgba(26,111,196,0.5);
       transform: translateY(-2px);
     }
- 
-    .phase-btn.active::before { opacity: 1; background: linear-gradient(90deg, transparent, var(--goose-light), transparent); }
- 
+
+    .phase-btn.active::before {
+      opacity: 1;
+      background: linear-gradient(90deg, transparent, var(--goose-light), transparent);
+    }
+
+    /* ── PHASE BUTTONS – GROUP 2 (Violeta/Duel) ── */
+    .phase-btn.duel {
+      background: linear-gradient(160deg, var(--duel-dark), #080514);
+      border: 2px solid rgba(8,145,178,0.25);
+    }
+
+    .phase-btn.duel::before {
+      background: linear-gradient(90deg, transparent, var(--duel-purple), transparent);
+    }
+
+    .phase-btn.duel:hover {
+      border-color: rgba(8,145,178,0.6);
+      background: linear-gradient(160deg, var(--duel-mid), #1a0f35);
+      box-shadow: 0 8px 28px rgba(8,145,178,0.2);
+    }
+
+    .phase-btn.duel.active {
+      background: linear-gradient(135deg, var(--duel-purple), #065e77);
+      border-color: var(--duel-light);
+      box-shadow: 0 8px 32px rgba(8,145,178,0.5);
+      transform: translateY(-2px);
+    }
+
+    .phase-btn.duel.active::before {
+      opacity: 1;
+      background: linear-gradient(90deg, transparent, var(--duel-light), transparent);
+    }
+
+    .phase-btn.duel .btn-time {
+      color: var(--duel-light);
+    }
+
+    .phase-btn.duel.active .btn-time { color: white; }
+
+    /* ── SHARED BUTTON TEXT ── */
     .btn-name {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 700;
       letter-spacing: 0.04em;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.8);
+      color: rgba(255,255,255,0.75);
     }
- 
+
     .phase-btn.active .btn-name { color: white; }
- 
+
     .btn-time {
       font-family: 'Barlow Condensed', sans-serif;
       font-size: 1.8rem;
@@ -399,9 +514,9 @@
       letter-spacing: 2px;
       color: var(--goose-light);
     }
- 
+
     .phase-btn.active .btn-time { color: white; }
- 
+
     /* ── GOOSE WATERMARK ── */
     .goose-watermark {
       position: fixed;
@@ -416,7 +531,7 @@
       color: white;
       z-index: 0;
     }
- 
+
     /* ── FOOTER ── */
     footer {
       position: relative;
@@ -429,15 +544,15 @@
       text-transform: uppercase;
       border-top: 1px solid rgba(255,255,255,0.06);
     }
- 
+
     footer span {
       color: var(--goose-light);
       opacity: 0.6;
     }
- 
+
     /* ── RESPONSIVE ── */
     @media (max-width: 600px) {
-      header { padding: 0 16px; height: auto; padding: 14px 16px; flex-wrap: wrap; gap: 10px; }
+      header { padding: 14px 16px; height: auto; flex-wrap: wrap; gap: 10px; }
       .header-badge { display: none; }
       .clock-card { padding: 32px 20px; }
       .phases-grid { grid-template-columns: repeat(2, 1fr); }
@@ -447,9 +562,9 @@
   </style>
 </head>
 <body>
- 
+
 <div class="goose-watermark">GOOSE</div>
- 
+
 <header>
   <div class="header-left">
     <div class="logo-box">
@@ -465,11 +580,11 @@
     <img src="Marca Chamberi-Distrito-azul (1)_page-0001.jpg" alt="Distrito Chamberí" />
   </div>
 </header>
- 
+
 <main>
- 
+
   <!-- Clock display -->
-  <div class="clock-card">
+  <div class="clock-card" id="clockCard">
     <div class="phase-label" id="phaseLabel">Selecciona un turno</div>
     <div class="time-display" id="timeDisplay">00:00</div>
     <div class="progress-bar-wrap">
@@ -477,61 +592,86 @@
     </div>
     <div class="status-bar" id="statusBar">– Elige un turno para comenzar –</div>
   </div>
- 
+
   <!-- Controls -->
   <div class="controls">
     <button class="ctrl-btn primary" id="btnStartPause" onclick="toggleStartPause()">▶ &nbsp;Iniciar</button>
     <button class="ctrl-btn" onclick="resetTimer()">↺ &nbsp;Reiniciar</button>
   </div>
- 
+
   <!-- Phase buttons -->
   <div class="phases-section">
-    <div class="phases-title">▪ Turnos del debate ▪</div>
-    <div class="phases-grid" id="phasesGrid"></div>
+
+    <!-- GROUP 1: Palabra Caliente -->
+    <div class="phase-group">
+      <div class="phases-title">Palabra Caliente</div>
+      <div class="phases-grid" id="grid-group1"></div>
+    </div>
+
+    <!-- GROUP 2: Duelo de Personajes -->
+    <div class="phase-group">
+      <div class="phases-title duel-title">Duelo de Personajes</div>
+      <div class="phases-grid" id="grid-group2"></div>
+    </div>
+
   </div>
- 
+
 </main>
- 
+
 <footer>
-  II Concurso de Oratoria Escolar · Chamberí · 
+  II Concurso de Oratoria Escolar · Chamberí ·
   <span>Goose Talent</span>
 </footer>
- 
+
 <script>
   /* ── PHASES ── */
   const PHASES = [
-    { name: 'Feedback 4 Equipos',  seconds: 30 * 60 },
-    { name: 'Feedback 5 Equipos',  seconds: 37 * 60 },
+    // Group 1 – Palabra Caliente (azul)
+    { name: 'Palabra Caliente · Preparación', seconds: 15,  group: 1 },
+    { name: 'Intervención A',                 seconds: 20,  group: 1 },
+    { name: 'Intervención B',                 seconds: 20,  group: 1 },
+    { name: 'Intervención C',                 seconds: 20,  group: 1 },
+    // Group 2 – Duelo de Personajes (cian)
+    { name: 'Duelo de Personajes · Preparación', seconds: 60, group: 2 },
+    { name: 'Exposición Inicial A',              seconds: 60, group: 2 },
+    { name: 'Exposición Inicial B',              seconds: 60, group: 2 },
+    { name: 'Réplica Participante A',            seconds: 30, group: 2 },
+    { name: 'Réplica Participante B',            seconds: 30, group: 2 },
   ];
- 
+
   /* ── STATE ── */
   let currentPhaseIdx = null;
   let totalSeconds    = 0;
   let elapsed         = 0;
   let running         = false;
   let interval        = null;
- 
+  let currentGroup    = 1;
+
   /* ── DOM ── */
   const timeDisplay = document.getElementById('timeDisplay');
   const phaseLabel  = document.getElementById('phaseLabel');
   const statusBar   = document.getElementById('statusBar');
   const progressBar = document.getElementById('progressBar');
   const btnSP       = document.getElementById('btnStartPause');
- 
+  const clockCard   = document.getElementById('clockCard');
+
   /* ── BUILD PHASE BUTTONS ── */
-  const grid = document.getElementById('phasesGrid');
+  const grid1 = document.getElementById('grid-group1');
+  const grid2 = document.getElementById('grid-group2');
+
   PHASES.forEach((p, i) => {
     const btn = document.createElement('button');
-    btn.className = 'phase-btn';
+    const isDuel = p.group === 2;
+    btn.className = isDuel ? 'phase-btn duel' : 'phase-btn';
     btn.id = `phase-${i}`;
     btn.innerHTML = `
       <span class="btn-name">${p.name}</span>
       <span class="btn-time">${formatTime(p.seconds)}</span>
     `;
     btn.onclick = () => selectPhase(i);
-    grid.appendChild(btn);
+    (isDuel ? grid2 : grid1).appendChild(btn);
   });
- 
+
   /* ── HELPERS ── */
   function formatTime(sec) {
     const abs = Math.abs(sec);
@@ -539,18 +679,29 @@
     const s = abs % 60;
     return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
   }
- 
+
+  function setStartButton(isDuel) {
+    if (running) {
+      btnSP.innerHTML = '⏸ &nbsp;Pausar';
+      btnSP.className = 'ctrl-btn';
+    } else {
+      btnSP.innerHTML = '▶ &nbsp;Iniciar';
+      btnSP.className = isDuel ? 'ctrl-btn primary-duel' : 'ctrl-btn primary';
+    }
+  }
+
   function updateDisplay() {
     if (currentPhaseIdx === null) return;
     const remaining = totalSeconds - elapsed;
     const pct = Math.max(0, remaining / totalSeconds * 100);
- 
+    const isDuel = currentGroup === 2;
+
     progressBar.style.width = (remaining >= 0 ? pct : 100) + '%';
- 
+
     if (remaining > 60) {
       timeDisplay.textContent = formatTime(remaining);
       timeDisplay.className = 'time-display';
-      progressBar.className = 'progress-bar-fill';
+      progressBar.className = isDuel ? 'progress-bar-fill duel' : 'progress-bar-fill';
       statusBar.textContent = `Tiempo restante – ${PHASES[currentPhaseIdx].name}`;
     } else if (remaining > 0) {
       timeDisplay.textContent = formatTime(remaining);
@@ -572,34 +723,39 @@
       statusBar.textContent = `⛔ Tiempo extra – ${PHASES[currentPhaseIdx].name}`;
     }
   }
- 
+
   /* ── PHASE SELECT ── */
   function selectPhase(idx) {
     stopTimer();
     currentPhaseIdx = idx;
     totalSeconds    = PHASES[idx].seconds;
     elapsed         = 0;
- 
+    currentGroup    = PHASES[idx].group;
+    const isDuel    = currentGroup === 2;
+
+    // Card theme
+    clockCard.classList.toggle('duel-mode', isDuel);
+
     phaseLabel.textContent = PHASES[idx].name;
     timeDisplay.textContent = formatTime(totalSeconds);
     timeDisplay.className = 'time-display';
-    progressBar.className = 'progress-bar-fill';
+    progressBar.className = isDuel ? 'progress-bar-fill duel' : 'progress-bar-fill';
     progressBar.style.width = '100%';
     statusBar.textContent = 'Listo para iniciar';
-    btnSP.innerHTML = '▶ &nbsp;Iniciar';
-    btnSP.className = 'ctrl-btn primary';
- 
+
+    setStartButton(isDuel);
+
     document.querySelectorAll('.phase-btn').forEach((b, i) => {
       b.classList.toggle('active', i === idx);
     });
   }
- 
+
   /* ── TIMER ── */
   function toggleStartPause() {
     if (currentPhaseIdx === null) return;
     if (running) { pauseTimer(); } else { startTimer(); }
   }
- 
+
   function startTimer() {
     running = true;
     btnSP.innerHTML = '⏸ &nbsp;Pausar';
@@ -609,32 +765,32 @@
       updateDisplay();
     }, 1000);
   }
- 
+
   function pauseTimer() {
     running = false;
     clearInterval(interval);
-    btnSP.innerHTML = '▶ &nbsp;Reanudar';
-    btnSP.className = 'ctrl-btn primary';
+    setStartButton(currentGroup === 2);
     statusBar.textContent = 'Pausado';
   }
- 
+
   function stopTimer() {
     running = false;
     clearInterval(interval);
   }
- 
+
   function resetTimer() {
     stopTimer();
     if (currentPhaseIdx === null) return;
+    const isDuel = currentGroup === 2;
     elapsed = 0;
     timeDisplay.textContent = formatTime(totalSeconds);
     timeDisplay.className = 'time-display';
-    progressBar.className = 'progress-bar-fill';
+    progressBar.className = isDuel ? 'progress-bar-fill duel' : 'progress-bar-fill';
     progressBar.style.width = '100%';
     statusBar.textContent = 'Reiniciado – listo para iniciar';
-    btnSP.innerHTML = '▶ &nbsp;Iniciar';
-    btnSP.className = 'ctrl-btn primary';
+    setStartButton(isDuel);
   }
 </script>
 </body>
 </html>
+
