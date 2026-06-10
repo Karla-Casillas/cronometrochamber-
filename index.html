@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cronómetro – Torneo Municipal de Debate Las Rozas</title>
+  <title>Cronómetro – I Competición de Debate Escolar JMD Chamberí </title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -14,11 +14,6 @@
       --goose-accent:   #f5a623;
       --white:          #ffffff;
       --danger:         #ff3b3b;
-      /* Group 2 – Duelo de Personajes: cyan/teal blue */
-      --duel-purple:    #0891b2;
-      --duel-light:     #22d3ee;
-      --duel-dark:      #041f2e;
-      --duel-mid:       #082d3f;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -177,25 +172,12 @@
       transition: border-color 0.4s;
     }
 
-    .clock-card.duel-mode {
-      border-color: rgba(8,145,178,0.45);
-      box-shadow:
-        0 0 0 1px rgba(255,255,255,0.04),
-        0 12px 60px rgba(0,0,0,0.6),
-        inset 0 1px 0 rgba(255,255,255,0.06);
-    }
-
     .clock-card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 3px;
       background: linear-gradient(90deg, transparent, var(--goose-blue), var(--goose-light), transparent);
-      transition: background 0.4s;
-    }
-
-    .clock-card.duel-mode::before {
-      background: linear-gradient(90deg, transparent, var(--duel-purple), var(--duel-light), transparent);
     }
 
     .clock-card::after {
@@ -216,11 +198,6 @@
       margin-bottom: 12px;
       min-height: 1.2em;
       font-weight: 700;
-      transition: color 0.4s;
-    }
-
-    .clock-card.duel-mode .phase-label {
-      color: var(--duel-light);
     }
 
     .time-display {
@@ -266,10 +243,6 @@
       background: linear-gradient(90deg, var(--goose-blue), var(--goose-light));
       transition: width 0.9s linear, background 0.3s;
       width: 100%;
-    }
-
-    .progress-bar-fill.duel {
-      background: linear-gradient(90deg, var(--duel-purple), var(--duel-light));
     }
 
     .progress-bar-fill.warning {
@@ -332,39 +305,13 @@
       transform: translateY(-2px);
     }
 
-    .ctrl-btn.primary-duel {
-      background: linear-gradient(135deg, var(--duel-purple), var(--duel-light));
-      color: var(--white);
-      border-color: transparent;
-      box-shadow: 0 6px 24px rgba(8,145,178,0.45);
-    }
-    .ctrl-btn.primary-duel:hover {
-      box-shadow: 0 8px 32px rgba(8,145,178,0.6);
-      transform: translateY(-2px);
-    }
-
-    .ctrl-btn.danger-btn {
-      border-color: rgba(255,80,80,0.4);
-      color: #ff8080;
-    }
-    .ctrl-btn.danger-btn:hover {
-      background: rgba(255,60,60,0.1);
-      border-color: var(--danger);
-    }
-
     /* ── PHASES SECTION ── */
     .phases-section {
       width: 100%;
       max-width: 960px;
       display: flex;
       flex-direction: column;
-      gap: 24px;
-    }
-
-    .phase-group {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      gap: 16px;
     }
 
     .phases-title {
@@ -381,10 +328,6 @@
       justify-content: center;
     }
 
-    .phases-title.duel-title {
-      color: rgba(34,211,238,0.55);
-    }
-
     .phases-title::before,
     .phases-title::after {
       content: '';
@@ -398,21 +341,13 @@
       background: linear-gradient(270deg, transparent, rgba(58,155,213,0.2));
     }
 
-    .phases-title.duel-title::before {
-      background: linear-gradient(90deg, transparent, rgba(34,211,238,0.2));
-    }
-
-    .phases-title.duel-title::after {
-      background: linear-gradient(270deg, transparent, rgba(34,211,238,0.2));
-    }
-
     .phases-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 12px;
     }
 
-    /* ── PHASE BUTTONS – GROUP 1 (Azul) ── */
+    /* ── PHASE BUTTONS ── */
     .phase-btn {
       background: linear-gradient(160deg, var(--goose-mid), #081724);
       border: 2px solid rgba(26,111,196,0.25);
@@ -462,41 +397,6 @@
       background: linear-gradient(90deg, transparent, var(--goose-light), transparent);
     }
 
-    /* ── PHASE BUTTONS – GROUP 2 (Violeta/Duel) ── */
-    .phase-btn.duel {
-      background: linear-gradient(160deg, var(--duel-dark), #080514);
-      border: 2px solid rgba(8,145,178,0.25);
-    }
-
-    .phase-btn.duel::before {
-      background: linear-gradient(90deg, transparent, var(--duel-purple), transparent);
-    }
-
-    .phase-btn.duel:hover {
-      border-color: rgba(8,145,178,0.6);
-      background: linear-gradient(160deg, var(--duel-mid), #1a0f35);
-      box-shadow: 0 8px 28px rgba(8,145,178,0.2);
-    }
-
-    .phase-btn.duel.active {
-      background: linear-gradient(135deg, var(--duel-purple), #065e77);
-      border-color: var(--duel-light);
-      box-shadow: 0 8px 32px rgba(8,145,178,0.5);
-      transform: translateY(-2px);
-    }
-
-    .phase-btn.duel.active::before {
-      opacity: 1;
-      background: linear-gradient(90deg, transparent, var(--duel-light), transparent);
-    }
-
-    .phase-btn.duel .btn-time {
-      color: var(--duel-light);
-    }
-
-    .phase-btn.duel.active .btn-time { color: white; }
-
-    /* ── SHARED BUTTON TEXT ── */
     .btn-name {
       font-size: 0.82rem;
       font-weight: 700;
@@ -572,7 +472,7 @@
     </div>
     <div class="header-divider"></div>
     <div class="header-text">
-      <h1>II Concurso de Oratoria Escolar</h1>
+      <h1>I Competición de Debate Escolar JMD · Chamberí ·</h1>
       <p>Chamberí</p>
     </div>
   </div>
@@ -601,42 +501,26 @@
 
   <!-- Phase buttons -->
   <div class="phases-section">
-
-    <!-- GROUP 1: Palabra Caliente -->
-    <div class="phase-group">
-      <div class="phases-title">Palabra Caliente</div>
-      <div class="phases-grid" id="grid-group1"></div>
-    </div>
-
-    <!-- GROUP 2: Duelo de Personajes -->
-    <div class="phase-group">
-      <div class="phases-title duel-title">Duelo de Personajes</div>
-      <div class="phases-grid" id="grid-group2"></div>
-    </div>
-
+    <div class="phases-title">Turnos de Debate</div>
+    <div class="phases-grid" id="grid-phases"></div>
   </div>
 
 </main>
 
 <footer>
-  II Concurso de Oratoria Escolar · Chamberí ·
+  I Competición de Debate Escolar JMD · Chamberí ·
   <span>Goose Talent</span>
 </footer>
 
 <script>
   /* ── PHASES ── */
   const PHASES = [
-    // Group 1 – Palabra Caliente (azul)
-    { name: 'Palabra Caliente · Preparación', seconds: 15,  group: 1 },
-    { name: 'Intervención A',                 seconds: 20,  group: 1 },
-    { name: 'Intervención B',                 seconds: 20,  group: 1 },
-    { name: 'Intervención C',                 seconds: 20,  group: 1 },
-    // Group 2 – Duelo de Personajes (cian)
-    { name: 'Duelo de Personajes · Preparación', seconds: 60, group: 2 },
-    { name: 'Exposición Inicial A',              seconds: 60, group: 2 },
-    { name: 'Exposición Inicial B',              seconds: 60, group: 2 },
-    { name: 'Réplica Participante A',            seconds: 30, group: 2 },
-    { name: 'Réplica Participante B',            seconds: 30, group: 2 },
+    { name: 'Discurso',       seconds: 240 },
+    { name: 'Refutación 1',   seconds: 240 },
+    { name: 'Pregunta R1',    seconds:  60 },
+    { name: 'Refutación 2',   seconds: 240 },
+    { name: 'Pregunta R2',    seconds:  60 },
+    { name: 'Conclusión',     seconds: 180 },
   ];
 
   /* ── STATE ── */
@@ -645,7 +529,6 @@
   let elapsed         = 0;
   let running         = false;
   let interval        = null;
-  let currentGroup    = 1;
 
   /* ── DOM ── */
   const timeDisplay = document.getElementById('timeDisplay');
@@ -656,20 +539,18 @@
   const clockCard   = document.getElementById('clockCard');
 
   /* ── BUILD PHASE BUTTONS ── */
-  const grid1 = document.getElementById('grid-group1');
-  const grid2 = document.getElementById('grid-group2');
+  const grid = document.getElementById('grid-phases');
 
   PHASES.forEach((p, i) => {
     const btn = document.createElement('button');
-    const isDuel = p.group === 2;
-    btn.className = isDuel ? 'phase-btn duel' : 'phase-btn';
+    btn.className = 'phase-btn';
     btn.id = `phase-${i}`;
     btn.innerHTML = `
       <span class="btn-name">${p.name}</span>
       <span class="btn-time">${formatTime(p.seconds)}</span>
     `;
     btn.onclick = () => selectPhase(i);
-    (isDuel ? grid2 : grid1).appendChild(btn);
+    grid.appendChild(btn);
   });
 
   /* ── HELPERS ── */
@@ -680,13 +561,13 @@
     return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
   }
 
-  function setStartButton(isDuel) {
+  function setStartButton() {
     if (running) {
-      btnSP.innerHTML = '⏸ &nbsp;Pausar';
+      btnSP.innerHTML = '&nbsp;Pausar';
       btnSP.className = 'ctrl-btn';
     } else {
-      btnSP.innerHTML = '▶ &nbsp;Iniciar';
-      btnSP.className = isDuel ? 'ctrl-btn primary-duel' : 'ctrl-btn primary';
+      btnSP.innerHTML = '&nbsp;Iniciar';
+      btnSP.className = 'ctrl-btn primary';
     }
   }
 
@@ -694,14 +575,13 @@
     if (currentPhaseIdx === null) return;
     const remaining = totalSeconds - elapsed;
     const pct = Math.max(0, remaining / totalSeconds * 100);
-    const isDuel = currentGroup === 2;
 
     progressBar.style.width = (remaining >= 0 ? pct : 100) + '%';
 
     if (remaining > 60) {
       timeDisplay.textContent = formatTime(remaining);
       timeDisplay.className = 'time-display';
-      progressBar.className = isDuel ? 'progress-bar-fill duel' : 'progress-bar-fill';
+      progressBar.className = 'progress-bar-fill';
       statusBar.textContent = `Tiempo restante – ${PHASES[currentPhaseIdx].name}`;
     } else if (remaining > 0) {
       timeDisplay.textContent = formatTime(remaining);
@@ -720,7 +600,7 @@
       timeDisplay.className = 'time-display blink-red';
       progressBar.className = 'progress-bar-fill danger';
       progressBar.style.width = '100%';
-      statusBar.textContent = `⛔ Tiempo extra – ${PHASES[currentPhaseIdx].name}`;
+      statusBar.textContent = `Tiempo extra – ${PHASES[currentPhaseIdx].name}`;
     }
   }
 
@@ -730,20 +610,15 @@
     currentPhaseIdx = idx;
     totalSeconds    = PHASES[idx].seconds;
     elapsed         = 0;
-    currentGroup    = PHASES[idx].group;
-    const isDuel    = currentGroup === 2;
-
-    // Card theme
-    clockCard.classList.toggle('duel-mode', isDuel);
 
     phaseLabel.textContent = PHASES[idx].name;
     timeDisplay.textContent = formatTime(totalSeconds);
     timeDisplay.className = 'time-display';
-    progressBar.className = isDuel ? 'progress-bar-fill duel' : 'progress-bar-fill';
+    progressBar.className = 'progress-bar-fill';
     progressBar.style.width = '100%';
     statusBar.textContent = 'Listo para iniciar';
 
-    setStartButton(isDuel);
+    setStartButton();
 
     document.querySelectorAll('.phase-btn').forEach((b, i) => {
       b.classList.toggle('active', i === idx);
@@ -769,7 +644,7 @@
   function pauseTimer() {
     running = false;
     clearInterval(interval);
-    setStartButton(currentGroup === 2);
+    setStartButton();
     statusBar.textContent = 'Pausado';
   }
 
@@ -781,16 +656,14 @@
   function resetTimer() {
     stopTimer();
     if (currentPhaseIdx === null) return;
-    const isDuel = currentGroup === 2;
     elapsed = 0;
     timeDisplay.textContent = formatTime(totalSeconds);
     timeDisplay.className = 'time-display';
-    progressBar.className = isDuel ? 'progress-bar-fill duel' : 'progress-bar-fill';
+    progressBar.className = 'progress-bar-fill';
     progressBar.style.width = '100%';
     statusBar.textContent = 'Reiniciado – listo para iniciar';
-    setStartButton(isDuel);
+    setStartButton();
   }
 </script>
 </body>
 </html>
-
