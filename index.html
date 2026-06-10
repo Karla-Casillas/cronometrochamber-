@@ -213,12 +213,28 @@
       z-index: 1;
     }
 
+    /* Naranja – último minuto (remaining 22–60 s) */
+    .time-display.orange {
+      color: #ff8c00;
+      text-shadow: 0 0 40px rgba(255,140,0,0.45);
+    }
+
+    /* Verde – zona segura (±0–15 s) */
+    .time-display.safe {
+      color: #2ecc71;
+      text-shadow: 0 0 40px rgba(46,204,113,0.4);
+    }
+
+    /* Amarillo – aviso (±16–20 s) */
     .time-display.warning {
       color: var(--goose-accent);
       text-shadow: 0 0 40px rgba(245,166,35,0.4);
     }
 
-    .time-display.blink-red {
+    /* Rojo – falta leve (±21 s o más) */
+    .time-display.danger {
+      color: var(--danger);
+      text-shadow: 0 0 40px rgba(255,59,59,0.5);
       animation: blinkRed 0.7s step-start infinite;
     }
 
@@ -243,6 +259,14 @@
       background: linear-gradient(90deg, var(--goose-blue), var(--goose-light));
       transition: width 0.9s linear, background 0.3s;
       width: 100%;
+    }
+
+    .progress-bar-fill.orange {
+      background: linear-gradient(90deg, #ff8c00, #ffb347);
+    }
+
+    .progress-bar-fill.safe {
+      background: linear-gradient(90deg, #27ae60, #2ecc71);
     }
 
     .progress-bar-fill.warning {
@@ -521,7 +545,7 @@
     { name: 'Refutación 2',   seconds: 240 },
     { name: 'Pregunta R2',    seconds:  60 },
     { name: 'Conclusión',     seconds: 180 },
-    {name: 'Deliberación',    seconds: 1200},
+    { name: 'Deliberación',   seconds: 1200 },
   ];
 
   /* ── STATE ── */
@@ -564,44 +588,84 @@
 
   function setStartButton() {
     if (running) {
-      btnSP.innerHTML = '&nbsp;Pausar';
+      btnSP.innerHTML = '⏸ &nbsp;Pausar';
       btnSP.className = 'ctrl-btn';
     } else {
-      btnSP.innerHTML = '&nbsp;Iniciar';
+      btnSP.innerHTML = '▶ &nbsp;Iniciar';
       btnSP.className = 'ctrl-btn primary';
     }
   }
 
+  /*
+   * ── ZONAS DE COLOR ──
+   *
+   *  remaining > 60        → normal  (blanco, cuenta atrás sin alertas)
+   *  remaining 22 – 60     → orange  (último minuto)
+   *  remaining = 21        → red     (falta leve – desajuste negativo ≥21 s)
+   *  remaining 16 – 20     → yellow  (aviso – desajuste negativo 16–20 s)
+   *  remaining 0 – 15      → safe    (verde – zona segura)
+   *  overtime  1 – 15      → safe    (verde – zona segura)
+   *  overtime  16 – 20     → yellow  (aviso)
+   *  overtime  21+         → red     (falta leve)
+   */
+  function getZone(remaining) {
+    if (remaining > 60)  return 'normal';   // cuenta atrás normal
+    if (remaining > 21)  return 'orange';   // último minuto
+    if (remaining >= 21) return 'red';      // exactamente 21 s = umbral falta leve
+    if (remaining >= 16) return 'yellow';   // 16–20 s = aviso
+    if (remaining >= 0)  return 'safe';     // 0–15 s = zona segura
+
+    // Tiempo extra
+    const overtime = -remaining;
+    if (overtime <= 15) return 'safe';
+    if (overtime <= 20) return 'yellow';
+    return 'red';
+  }
+
   function updateDisplay() {
     if (currentPhaseIdx === null) return;
+
     const remaining = totalSeconds - elapsed;
-    const pct = Math.max(0, remaining / totalSeconds * 100);
+    const zone      = getZone(remaining);
+    const phaseName = PHASES[currentPhaseIdx].name;
 
-    progressBar.style.width = (remaining >= 0 ? pct : 100) + '%';
-
-    if (remaining > 60) {
-      timeDisplay.textContent = formatTime(remaining);
-      timeDisplay.className = 'time-display';
-      progressBar.className = 'progress-bar-fill';
-      statusBar.textContent = `Tiempo restante – ${PHASES[currentPhaseIdx].name}`;
-    } else if (remaining > 0) {
-      timeDisplay.textContent = formatTime(remaining);
-      timeDisplay.className = 'time-display warning';
-      progressBar.className = 'progress-bar-fill warning';
-      statusBar.textContent = `⚠ Último minuto – ${PHASES[currentPhaseIdx].name}`;
-    } else if (remaining === 0) {
-      timeDisplay.textContent = '00:00';
-      timeDisplay.className = 'time-display blink-red';
-      progressBar.className = 'progress-bar-fill danger';
-      progressBar.style.width = '0%';
-      statusBar.textContent = '¡Tiempo agotado!';
+    /* ── Barra de progreso ── */
+    if (remaining >= 0) {
+      progressBar.style.width = (remaining / totalSeconds * 100) + '%';
     } else {
-      const overtimeElapsed = elapsed - totalSeconds;
-      timeDisplay.textContent = '+' + formatTime(overtimeElapsed);
-      timeDisplay.className = 'time-display blink-red';
-      progressBar.className = 'progress-bar-fill danger';
+      // En tiempo extra: barra llena con color de zona
       progressBar.style.width = '100%';
-      statusBar.textContent = `Tiempo extra – ${PHASES[currentPhaseIdx].name}`;
+    }
+
+    /* ── Clases de color ── */
+    const zoneClass = { normal: '', orange: ' orange', safe: ' safe', yellow: ' warning', red: ' danger' };
+    progressBar.className = 'progress-bar-fill' + zoneClass[zone];
+    timeDisplay.className  = 'time-display'      + zoneClass[zone];
+
+    /* ── Texto del reloj ── */
+    if (remaining >= 0) {
+      timeDisplay.textContent = formatTime(remaining);
+    } else {
+      timeDisplay.textContent = '+' + formatTime(-remaining);
+    }
+
+    /* ── Barra de estado ── */
+    if (zone === 'normal') {
+      statusBar.textContent = `Tiempo restante – ${phaseName}`;
+    } else if (zone === 'orange') {
+      statusBar.textContent = `⏱ Último minuto – ${phaseName}`;
+    } else if (zone === 'safe') {
+      if (remaining >= 0) {
+        statusBar.textContent = `✓ Zona segura – ${phaseName}`;
+      } else {
+        statusBar.textContent = `✓ Zona segura (+${-remaining}s) – ${phaseName}`;
+      }
+    } else if (zone === 'yellow') {
+      const d = remaining >= 0 ? remaining : -remaining;
+      statusBar.textContent = `⚠ Aviso – desajuste de ${d}s – ${phaseName}`;
+    } else {
+      const d = remaining >= 0 ? remaining : -remaining;
+      statusBar.textContent = `✗ Falta leve – desajuste de ${d}s – ${phaseName}`;
     }
   }
 
